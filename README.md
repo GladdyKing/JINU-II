@@ -4,9 +4,9 @@
 </h1>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/gladdyx/JINU-II?style=for-the-badge" />
-  <img src="https://img.shields.io/github/forks/gladdyx/JINU-II?style=for-the-badge" />
-  <img src="https://img.shields.io/github/license/gladdyx/JINU-II?style=for-the-badge" />
+  <img src="https://img.shields.io/github/stars/GladdyKing/JINU-II?style=for-the-badge" />
+  <img src="https://img.shields.io/github/forks/GladdyKing/JINU-II?style=for-the-badge" />
+  <img src="https://img.shields.io/github/license/GladdyKing/JINU-II?style=for-the-badge" />
 </p>
 
 <div align="center">
