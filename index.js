@@ -1,343 +1,316 @@
-const fs = require('fs');
-const path = require('path');
 
-// Function to load user and group data from JSON file
-function loadUserGroupData() {
-    try {
-        const dataPath = path.join(__dirname, '../data/userGroupData.json');
-        if (!fs.existsSync(dataPath)) {
-            const defaultData = {
-                antibadword: {},
-                antilink: {},
-                welcome: {},
-                goodbye: {},
-                chatbot: {},
-                warnings: {},
-                sudo: []
-            };
-            fs.writeFileSync(dataPath, JSON.stringify(defaultData, null, 2));
-            return defaultData;
+require('./settings')
+const { Boom } = require('@hapi/boom')
+const fs = require('fs')
+const chalk = require('chalk')
+const FileType = require('file-type')
+const path = require('path')
+const axios = require('axios')
+const { handleMessages, handleGroupParticipantUpdate, handleStatus } = require('./main');
+const PhoneNumber = require('awesome-phonenumber')
+const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
+const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetch, await, sleep, reSize } = require('./lib/myfunc')
+const { 
+    default: makeWASocket,
+    useMultiFileAuthState, 
+    DisconnectReason, 
+    fetchLatestBaileysVersion,
+    generateForwardMessageContent,
+    prepareWAMessageMedia,
+    generateWAMessageFromContent,
+    generateMessageID,
+    downloadContentFromMessage,
+    jidDecode,
+    proto,
+    jidNormalizedUser,
+    makeCacheableSignalKeyStore,
+    delay
+} = require("@whiskeysockets/baileys")
+const NodeCache = require("node-cache")
+const pino = require("pino")
+const readline = require("readline")
+const { parsePhoneNumber } = require("libphonenumber-js")
+const { PHONENUMBER_MCC } = require('@whiskeysockets/baileys/lib/Utils/generics')
+const { rmSync, existsSync } = require('fs')
+const { join } = require('path')
+
+// Create a store object with required methods
+const store = {
+    messages: {},
+    contacts: {},
+    chats: {},
+    groupMetadata: async (jid) => {
+        return {}
+    },
+    bind: function(ev) {
+        // Handle events
+        ev.on('messages.upsert', ({ messages }) => {
+            messages.forEach(msg => {
+                if (msg.key && msg.key.remoteJid) {
+                    this.messages[msg.key.remoteJid] = this.messages[msg.key.remoteJid] || {}
+                    this.messages[msg.key.remoteJid][msg.key.id] = msg
+                }
+            })
+        })
+        
+        ev.on('contacts.update', (contacts) => {
+            contacts.forEach(contact => {
+                if (contact.id) {
+                    this.contacts[contact.id] = contact
+                }
+            })
+        })
+        
+        ev.on('chats.set', (chats) => {
+            this.chats = chats
+        })
+    },
+    loadMessage: async (jid, id) => {
+        return this.messages[jid]?.[id] || null
+    }
+}
+
+let phoneNumber = "263775953409"
+let owner = JSON.parse(fs.readFileSync('./data/owner.json'))
+
+global.botname = "ᴊɪɴᴜ-ɪɪ"
+global.themeemoji = "•"
+
+const settings = require('./settings')
+const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
+const useMobile = process.argv.includes("--mobile")
+
+// Only create readline interface if we're in an interactive environment
+const rl = process.stdin.isTTY ? readline.createInterface({ input: process.stdin, output: process.stdout }) : null
+const question = (text) => {
+    if (rl) {
+        return new Promise((resolve) => rl.question(text, resolve))
+    } else {
+        // In non-interactive environment, use ownerNumber from settings
+        return Promise.resolve(settings.ownerNumber || phoneNumber)
+    }
+}
+
+         
+async function startXeonBotInc() {
+    let { version, isLatest } = await fetchLatestBaileysVersion()
+    const { state, saveCreds } = await useMultiFileAuthState(`./session`)
+    const msgRetryCounterCache = new NodeCache()
+
+    const XeonBotInc = makeWASocket({
+        version,
+        logger: pino({ level: 'silent' }),
+        printQRInTerminal: !pairingCode,
+        browser: ["Ubuntu", "Chrome", "20.0.04"],
+        auth: {
+            creds: state.creds,
+            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
+        },
+        markOnlineOnConnect: true,
+        generateHighQualityLinkPreview: true,
+        getMessage: async (key) => {
+            let jid = jidNormalizedUser(key.remoteJid)
+            let msg = await store.loadMessage(jid, key.id)
+            return msg?.message || ""
+        },
+        msgRetryCounterCache,
+        defaultQueryTimeoutMs: undefined,
+    })
+
+    store.bind(XeonBotInc.ev)
+
+    // Message handling
+    XeonBotInc.ev.on('messages.upsert', async chatUpdate => {
+        try {
+            const mek = chatUpdate.messages[0]
+            if (!mek.message) return
+            mek.message = (Object.keys(mek.message)[0] === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
+            if (mek.key && mek.key.remoteJid === 'status@broadcast') {
+                await handleStatus(XeonBotInc, chatUpdate);
+                return;
+            }
+            if (!XeonBotInc.public && !mek.key.fromMe && chatUpdate.type === 'notify') return
+            if (mek.key.id.startsWith('BAE5') && mek.key.id.length === 16) return
+            
+            try {
+                await handleMessages(XeonBotInc, chatUpdate, true)
+            } catch (err) {
+                console.error("Error in handleMessages:", err)
+                // Only try to send error message if we have a valid chatId
+                if (mek.key && mek.key.remoteJid) {
+                    await XeonBotInc.sendMessage(mek.key.remoteJid, { 
+                        text: '❌ An error occurred while processing your message.',
+                        contextInfo: {
+                            forwardingScore: 1,
+                            isForwarded: true,
+                            forwardedNewsletterMessageInfo: {
+                                newsletterJid: '120363422020175323@newsletter',
+                                newsletterName: 'ᴊɪɴᴜ-ɪɪ',
+                                serverMessageId: -1
+                            }
+                        }
+                    }).catch(console.error);
+                }
+            }
+        } catch (err) {
+            console.error("Error in messages.upsert:", err)
         }
-        const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        return data;
-    } catch (error) {
-        console.error('Error loading user group data:', error);
-        return {
-            antibadword: {},
-            antilink: {},
-            welcome: {},
-            goodbye: {},
-            chatbot: {},
-            warnings: {},
-            sudo: []
-        };
-    }
-}
+    })
 
-// Function to save user and group data to JSON file
-function saveUserGroupData(data) {
-    try {
-        const dataPath = path.join(__dirname, '../data/userGroupData.json');
-        const dir = path.dirname(dataPath);
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-        fs.writeFileSync(dataPath, JSON.stringify(data, null, 2));
-        return true;
-    } catch (error) {
-        console.error('Error saving user group data:', error);
-        return false;
+    // Add these event handlers for better functionality
+    XeonBotInc.decodeJid = (jid) => {
+        if (!jid) return jid
+        if (/:\d+@/gi.test(jid)) {
+            let decode = jidDecode(jid) || {}
+            return decode.user && decode.server && decode.user + '@' + decode.server || jid
+        } else return jid
     }
-}
 
-// Anti-link functions
-async function setAntilink(groupId, type, action) {
-    try {
-        const data = loadUserGroupData();
-        if (!data.antilink) data.antilink = {};
-        data.antilink[groupId] = { enabled: type === 'on', action: action || 'delete' };
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error setting antilink:', error);
-        return false;
-    }
-}
-
-async function getAntilink(groupId, type) {
-    try {
-        const data = loadUserGroupData();
-        if (!data.antilink || !data.antilink[groupId]) return null;
-        return type === 'on' ? data.antilink[groupId] : null;
-    } catch (error) {
-        console.error('Error getting antilink:', error);
-        return null;
-    }
-}
-
-async function removeAntilink(groupId) {
-    try {
-        const data = loadUserGroupData();
-        if (data.antilink && data.antilink[groupId]) delete data.antilink[groupId];
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error removing antilink:', error);
-        return false;
-    }
-}
-
-// Warning system
-async function incrementWarningCount(groupId, userId) {
-    try {
-        const data = loadUserGroupData();
-        if (!data.warnings) data.warnings = {};
-        if (!data.warnings[groupId]) data.warnings[groupId] = {};
-        if (!data.warnings[groupId][userId]) data.warnings[groupId][userId] = 0;
-        data.warnings[groupId][userId]++;
-        saveUserGroupData(data);
-        return data.warnings[groupId][userId];
-    } catch (error) {
-        console.error('Error incrementing warning count:', error);
-        return 0;
-    }
-}
-
-async function resetWarningCount(groupId, userId) {
-    try {
-        const data = loadUserGroupData();
-        if (data.warnings?.[groupId]?.[userId] !== undefined) {
-            data.warnings[groupId][userId] = 0;
-            saveUserGroupData(data);
+    XeonBotInc.ev.on('contacts.update', update => {
+        for (let contact of update) {
+            let id = XeonBotInc.decodeJid(contact.id)
+            if (store && store.contacts) store.contacts[id] = { id, name: contact.notify }
         }
-        return true;
-    } catch (error) {
-        console.error('Error resetting warning count:', error);
-        return false;
+    })
+
+    XeonBotInc.getName = (jid, withoutContact = false) => {
+        id = XeonBotInc.decodeJid(jid)
+        withoutContact = XeonBotInc.withoutContact || withoutContact 
+        let v
+        if (id.endsWith("@g.us")) return new Promise(async (resolve) => {
+            v = store.contacts[id] || {}
+            if (!(v.name || v.subject)) v = XeonBotInc.groupMetadata(id) || {}
+            resolve(v.name || v.subject || PhoneNumber('+' + id.replace('@s.whatsapp.net', '')).getNumber('international'))
+        })
+        else v = id === '0@s.whatsapp.net' ? {
+            id,
+            name: 'WhatsApp'
+        } : id === XeonBotInc.decodeJid(XeonBotInc.user.id) ?
+            XeonBotInc.user :
+            (store.contacts[id] || {})
+        return (withoutContact ? '' : v.name) || v.subject || v.verifiedName || PhoneNumber('+' + jid.replace('@s.whatsapp.net', '')).getNumber('international')
     }
+
+    XeonBotInc.public = true
+
+    XeonBotInc.serializeM = (m) => smsg(XeonBotInc, m, store)
+
+    // Handle pairing code
+    if (pairingCode && !XeonBotInc.authState.creds.registered) {
+        if (useMobile) throw new Error('Cannot use pairing code with mobile api')
+
+        let phoneNumber
+        if (!!global.phoneNumber) {
+            phoneNumber = global.phoneNumber
+        } else {
+            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number 😍\nFormat: 263775XXXZZZ (without + or spaces) : `)))
+        }
+
+        // Clean the phone number - remove any non-digit characters
+        phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
+
+        // Validate the phone number using awesome-phonenumber
+        const pn = require('awesome-phonenumber');
+        if (!pn('+' + phoneNumber).isValid()) {
+            console.log(chalk.red('Invalid phone number. Please enter your full international number (e.g., 15551234567 for US, 447911123456 for UK, etc.) without + or spaces.'));
+            process.exit(1);
+        }
+
+        setTimeout(async () => {
+            try {
+                let code = await XeonBotInc.requestPairingCode(phoneNumber)
+                code = code?.match(/.{1,4}/g)?.join("-") || code
+                console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
+                console.log(chalk.yellow(`\nPlease enter this code in your WhatsApp app:\n1. Open WhatsApp\n2. Go to Settings > Linked Devices\n3. Tap "Link a Device"\n4. Enter the code shown above`))
+            } catch (error) {
+                console.error('Error requesting pairing code:', error)
+                console.log(chalk.red('Failed to get pairing code. Please check your phone number and try again.'))
+            }
+        }, 3000)
+    }
+
+    // Connection handling
+    XeonBotInc.ev.on('connection.update', async (s) => {
+        const { connection, lastDisconnect } = s
+        if (connection == "open") {
+            console.log(chalk.magenta(` `))
+            console.log(chalk.yellow(`🌿Connected to => ` + JSON.stringify(XeonBotInc.user, null, 2)))
+            
+            const botNumber = XeonBotInc.user.id.split(':')[0] + '@s.whatsapp.net';
+            await XeonBotInc.sendMessage(botNumber, { 
+                text: `🤖 Bot Connected Successfully!\n\n⏰ Time: ${new Date().toLocaleString()}\n✅ Status: Online and Ready!
+                \n✅Make sure to join below channel`,
+                contextInfo: {
+                    forwardingScore: 1,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363422020175323@newsletter',
+                        newsletterName: 'ᴊɪɴᴜ-ɪɪ',
+                        serverMessageId: -1
+                    }
+                }
+            });
+
+            await delay(1999)
+            console.log(chalk.yellow(`\n\n                  ${chalk.bold.blue(`[ ${global.botname || 'JINU-II'} ]`)}\n\n`))
+            console.log(chalk.cyan(`< ================================================== >`))
+            console.log(chalk.magenta(`\n${global.themeemoji || '•'} 💯YT CHANNEL: GLADDYTECH`))
+            console.log(chalk.magenta(`${global.themeemoji || '•'} 😎GITHUB: GladdyKing`))
+            console.log(chalk.magenta(`${global.themeemoji || '•'} 🇿🇼WA NUMBER: ${owner}`))
+            console.log(chalk.magenta(`${global.themeemoji || '•'} 👑CREDIT: GladdyX,Malvin King`))
+            console.log(chalk.green(`${global.themeemoji || '•'} 😎 JINU-II is Running Smoothly ✅`))
+        }
+        if (
+            connection === "close" &&
+            lastDisconnect &&
+            lastDisconnect.error &&
+            lastDisconnect.error.output.statusCode != 401
+        ) {
+            startXeonBotInc()
+        }
+    })
+
+    XeonBotInc.ev.on('creds.update', saveCreds)
+    
+    XeonBotInc.ev.on('group-participants.update', async (update) => {
+        await handleGroupParticipantUpdate(XeonBotInc, update);
+    });
+
+    XeonBotInc.ev.on('messages.upsert', async (m) => {
+        if (m.messages[0].key && m.messages[0].key.remoteJid === 'status@broadcast') {
+            await handleStatus(XeonBotInc, m);
+        }
+    });
+
+    XeonBotInc.ev.on('status.update', async (status) => {
+        await handleStatus(XeonBotInc, status);
+    });
+
+    XeonBotInc.ev.on('messages.reaction', async (status) => {
+        await handleStatus(XeonBotInc, status);
+    });
+
+    return XeonBotInc
 }
 
-// Sudo management
-async function isSudo(userId) {
-    try {
-        const data = loadUserGroupData();
-        return data.sudo?.includes(userId) || false;
-    } catch (error) {
-        console.error('Error checking sudo:', error);
-        return false;
-    }
-}
 
-async function addSudo(userJid) {
-    try {
-        const data = loadUserGroupData();
-        if (!data.sudo) data.sudo = [];
-        if (!data.sudo.includes(userJid)) data.sudo.push(userJid);
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error adding sudo:', error);
-        return false;
-    }
-}
+// Start the bot with error handling
+startXeonBotInc().catch(error => {
+    console.error('Fatal error:', error)
+    process.exit(1)
+})
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err)
+})
 
-async function removeSudo(userJid) {
-    try {
-        const data = loadUserGroupData();
-        const index = data.sudo?.indexOf(userJid);
-        if (index !== -1) data.sudo.splice(index, 1);
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error removing sudo:', error);
-        return false;
-    }
-}
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err)
+})
 
-async function getSudoList() {
-    try {
-        const data = loadUserGroupData();
-        return Array.isArray(data.sudo) ? data.sudo : [];
-    } catch (error) {
-        console.error('Error getting sudo list:', error);
-        return [];
-    }
-}
-
-// Welcome system
-async function addWelcome(jid, enabled, message) {
-    try {
-        const data = loadUserGroupData();
-        data.welcome = data.welcome || {};
-        data.welcome[jid] = {
-            enabled,
-            message: message || `╭──〔 ⚔️ ᴡᴇʟᴄᴏᴍᴇ 〕──
-│
-├─ 🛡️ ᴜꜱᴇʀ: {user}
-├─ 🏰 ᴋɪɴɢᴅᴏᴍ: {group}
-│
-╞════════════════════╡
-│ 📜 ᴍᴇssᴀɢᴇ ꜰʀᴏᴍ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅᴇʀ:
-│ {description}
-│
-╰──〔 🧩 ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴊɪɴᴜ-ɪɪ 〕──`,
-            channelId: '120363422020175323@newsletter'
-        };
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error in addWelcome:', error);
-        return false;
-    }
-}
-
-async function delWelcome(jid) {
-    try {
-        const data = loadUserGroupData();
-        if (data.welcome?.[jid]) delete data.welcome[jid];
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error in delWelcome:', error);
-        return false;
-    }
-}
-
-async function isWelcomeOn(jid) {
-    try {
-        const data = loadUserGroupData();
-        return data.welcome?.[jid]?.enabled || false;
-    } catch (error) {
-        console.error('Error in isWelcomeOn:', error);
-        return false;
-    }
-}
-
-// Goodbye system
-async function addGoodbye(jid, enabled, message) {
-    try {
-        const data = loadUserGroupData();
-        data.goodbye = data.goodbye || {};
-        data.goodbye[jid] = {
-            enabled,
-            message: message || `╭──〔 ⚰️ ɢᴏᴏᴅʙʏᴇ 〕──
-│
-├─ 🛡️ ᴜꜱᴇʀ: {user}
-├─ 🏰 ᴋɪɴɢᴅᴏᴍ: {group}
-│
-╞════════════════════╡
-│ ⚰️ ʏᴏᴜ ʜᴀᴠᴇ ʙᴇᴇɴ ᴇxɪʟᴇᴅ ꜰʀᴏᴍ ᴛʜᴇ ʀᴇᴀʟᴍ.
-│ ᴡᴇ ᴡɪʟʟ ɴᴏᴛ ᴍɪss ʏᴏᴜ.
-│
-╰──〔 🧩 ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴊɪɴᴜ-ɪɪ 〕──`,
-            channelId: '120363422020175323@newsletter'
-        };
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error in addGoodbye:', error);
-        return false;
-    }
-}
-
-async function delGoodBye(jid) {
-    try {
-        const data = loadUserGroupData();
-        if (data.goodbye?.[jid]) delete data.goodbye[jid];
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error in delGoodBye:', error);
-        return false;
-    }
-}
-
-async function isGoodByeOn(jid) {
-    try {
-        const data = loadUserGroupData();
-        return data.goodbye?.[jid]?.enabled || false;
-    } catch (error) {
-        console.error('Error in isGoodByeOn:', error);
-        return false;
-    }
-}
-
-// Anti-badword system
-async function setAntiBadword(groupId, type, action) {
-    try {
-        const data = loadUserGroupData();
-        data.antibadword = data.antibadword || {};
-        data.antibadword[groupId] = { enabled: type === 'on', action: action || 'delete' };
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error setting antibadword:', error);
-        return false;
-    }
-}
-
-async function getAntiBadword(groupId, type) {
-    try {
-        const data = loadUserGroupData();
-        return type === 'on' ? data.antibadword?.[groupId] || null : null;
-    } catch (error) {
-        console.error('Error getting antibadword:', error);
-        return null;
-    }
-}
-
-async function removeAntiBadword(groupId) {
-    try {
-        const data = loadUserGroupData();
-        if (data.antibadword?.[groupId]) delete data.antibadword[groupId];
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error removing antibadword:', error);
-        return false;
-    }
-}
-
-// Chatbot system
-async function setChatbot(groupId, enabled) {
-    try {
-        const data = loadUserGroupData();
-        data.chatbot = data.chatbot || {};
-        data.chatbot[groupId] = { enabled };
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error setting chatbot:', error);
-        return false;
-    }
-}
-
-async function getChatbot(groupId) {
-    try {
-        const data = loadUserGroupData();
-        return data.chatbot?.[groupId] || null;
-    } catch (error) {
-        console.error('Error getting chatbot:', error);
-        return null;
-    }
-}
-
-async function removeChatbot(groupId) {
-    try {
-        const data = loadUserGroupData();
-        if (data.chatbot?.[groupId]) delete data.chatbot[groupId];
-        saveUserGroupData(data);
-        return true;
-    } catch (error) {
-        console.error('Error removing chatbot:', error);
-        return false;
-    }
-}
-
-module.exports = {
-    setAntilink, getAntilink, removeAntilink,
-    incrementWarningCount, resetWarningCount,
-    isSudo, addSudo, removeSudo, getSudoList,
-    addWelcome, delWelcome, isWelcomeOn,
-    addGoodbye, delGoodBye, isGoodByeOn,
-    setAntiBadword, getAntiBadword, removeAntiBadword,
-    setChatbot, getChatbot, removeChatbot
-};
+let file = require.resolve(__filename)
+fs.watchFile(file, () => {
+    fs.unwatchFile(file)
+    console.log(chalk.redBright(`Update ${__filename}`))
+    delete require.cache[file]
+    require(file)
+})
