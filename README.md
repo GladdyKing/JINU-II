@@ -1,7 +1,7 @@
 
-#🤖 JINU-II WhatsApp Bot
+# 🤖 JINU-II WhatsApp Bot
 
-JINU-II is a multi-device WhatsApp bot built using the Baileys library. Created by *Davison Gladson*, it empowers group admins with automation, moderation, and interactive tools to keep WhatsApp communities buzzing.
+JINU-II is a multi-device WhatsApp bot built using the Baileys library. Created by  Davison Gladson, it empowers group admins with automation, moderation, and interactive tools to keep WhatsApp communities buzzing.
 
 <div align="center">
   <a href="https://git.io/typing-svg">
@@ -11,7 +11,7 @@ JINU-II is a multi-device WhatsApp bot built using the Baileys library. Created 
 
 ---
 
-#👤 Bot Owner
+# 👤 Bot Owner
 
 <div align="center">
   <a href="https://github.com/GladdyKing">
@@ -24,7 +24,7 @@ JINU-II is a multi-device WhatsApp bot built using the Baileys library. Created 
 
 ---
 
-#🏷️ Badges
+# 🏷️ Badges
 
 <div align="center">
   <img src="https://img.shields.io/github/stars/GladdyKing/JINU-II?style=for-the-badge" alt="Stars"/>
@@ -36,13 +36,13 @@ JINU-II is a multi-device WhatsApp bot built using the Baileys library. Created 
 
 ---
 
-#🚀 How to Deploy
+# 🚀 How to Deploy
 
 Follow these 3 simple steps to get your bot running:
 
 ---
 
-#1️⃣ Fork the Repository
+# 1️⃣ Fork the Repository
 
 Click below to fork the JINU-II repo to your GitHub account:
 
@@ -54,7 +54,7 @@ Click below to fork the JINU-II repo to your GitHub account:
 
 ---
 
-#2️⃣ Get Your Session File
+# 2️⃣ Get Your Session File
 
 Generate your WhatsApp session file using the Pair Code method:
 
@@ -66,7 +66,7 @@ Generate your WhatsApp session file using the Pair Code method:
 
 ---
 
-#3️⃣ Upload Session File to Panel
+# 3️⃣ Upload Session File to Panel
 
 Deploy your bot using the KataBump hosting panel:
 
@@ -80,7 +80,7 @@ Deploy your bot using the KataBump hosting panel:
 
 ---
 
-#📢 Join the Community
+# 📢 Join the Community
 
 Stay updated and connect with other users:
 
@@ -92,7 +92,7 @@ Stay updated and connect with other users:
 
 ---
 
-#🎥 YouTube Channel
+# 🎥 YouTube Channel
 
 Watch tutorials, updates, and bot showcases:
 
@@ -104,7 +104,7 @@ Watch tutorials, updates, and bot showcases:
 
 ---
 
-#🙌 Support & Contributions
+# 🙌 Support & Contributions
 
 Feel free to contribute, suggest features, or report issues via the [GitHub Issues Page](https://github.com/GladdyKing/JINU-II/issues).
 
