@@ -15,7 +15,7 @@ JINU-II is a multi-device WhatsApp bot built using the Baileys library. Created 
 
 <div align="center">
   <a href="https://github.com/GladdyKing">
-    <img src="https://avatars.githubusercontent.com/u/149407497?v=4" width="200" style="border-radius:50%" alt="GladdyKing GitHub Profile"/>
+    <img src="[https://files.catbox.moe/qh3pkd.jpg]" width="200" style="border-radius:50%" alt="GladdyKing GitHub Profile"/>
     <br/>
     <strong>Davison Gladson</strong><br/>
     <code>@GladdyKing</code>
