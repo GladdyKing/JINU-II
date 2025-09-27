@@ -1,8 +1,16 @@
+
 const settings = require('../settings');
 const fs = require('fs');
 const path = require('path');
 
 async function helpCommand(sock, chatId, message) {
+    // ✅ Extract pushname safely
+    const pushname = message.pushName || 'Guest';
+
+    // ✅ Load config and commands (adjust as needed)
+    const config = settings;
+    const commands = config.COMMANDS || []; // Replace with actual command list if available
+
     const userInfoBlock = `
 ╭──〔 👤 ᴜsᴇʀ ᴘʀᴏꜰɪʟᴇ 〕──
 │
@@ -177,10 +185,10 @@ async function helpCommand(sock, chatId, message) {
 
     try {
         const imagePath = path.join(__dirname, '../assets/bot_image.jpg');
-        
+
         if (fs.existsSync(imagePath)) {
             const imageBuffer = fs.readFileSync(imagePath);
-            
+
             await sock.sendMessage(chatId, {
                 image: imageBuffer,
                 caption: helpMessage,
@@ -191,28 +199,28 @@ async function helpCommand(sock, chatId, message) {
                         newsletterJid: '120363422020175323@newsletter',
                         newsletterName: 'ᴊɪɴᴜ-ɪɪ',
                         serverMessageId: -1
-                    }
-                }
-            },{ quoted: message });
-        } else {
+}
+}
+}, { quoted: message});
+} else {
             console.error('Bot image not found at:', imagePath);
-            await sock.sendMessage(chatId, { 
+            await sock.sendMessage(chatId, {
                 text: helpMessage,
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
                     forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363422020175323@newsletter',
+newsletterJid: '120363422020175323@newsletter',
                         newsletterName: 'ᴊɪɴᴜ-ɪɪ',
                         serverMessageId: -1
-                    } 
-                }
-            });
-        }
-    } catch (error) {
+}
+}
+});
+}
+} catch (error) {
         console.error('Error in help command:', error);
-        await sock.sendMessage(chatId, { text: helpMessage });
-    }
+        await sock.sendMessage(chatId, { text: helpMessage});
+}
 }
 
 module.exports = helpCommand;
