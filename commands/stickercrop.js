@@ -36,9 +36,9 @@ async function stickercropCommand(sock, chatId, message) {
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363161513685998@newsletter',
-                    newsletterName: 'KnightBot MD',
-                    serverMessageId: -1
+                    newsletterJid: '120363422020175323@newsletter',
+          newsletterName: 'ᴊɪɴᴜ-ɪɪ',
+          serverMessageId: -1
                 }
             }
         },{ quoted: messageToQuote });
@@ -58,9 +58,9 @@ async function stickercropCommand(sock, chatId, message) {
                     forwardingScore: 999,
                     isForwarded: true,
                     forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363161513685998@newsletter',
-                        newsletterName: 'KnightBot MD',
-                        serverMessageId: -1
+                        newsletterJid: '120363422020175323@newsletter',
+          newsletterName: 'ᴊɪɴᴜ-ɪɪ',
+          serverMessageId: -1
                     }
                 }
             });
@@ -186,9 +186,9 @@ async function stickercropCommand(sock, chatId, message) {
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363161513685998@newsletter',
-                    newsletterName: 'KnightBot MD',
-                    serverMessageId: -1
+                    newsletterJid: '120363422020175323@newsletter',
+          newsletterName: 'ᴊɪɴᴜ-ɪɪ',
+          serverMessageId: -1
                 }
             }
         });
