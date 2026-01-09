@@ -187,8 +187,18 @@ async function handleChatbotResponse(sock, chatId, message, userMessage, senderI
     if (!data.chatbot[chatId]) return;
 
     try {
-        // Get bot's ID
-        const botNumber = sock.user.id.split(':')[0] + '@s.whatsapp.net';
+        // Get bot's ID - try multiple formats
+        const botId = sock.user.id;
+        const botNumber = botId.split(':')[0];
+        const botLid = sock.user.lid; // Get the actual LID from sock.user
+        const botJids = [
+            botId,
+            `${botNumber}@s.whatsapp.net`,
+            `${botNumber}@whatsapp.net`,
+            `${botNumber}@lid`,
+            botLid, // Add the actual LID
+            `${botLid.split(':')[0]}@lid` // Add LID without session part
+        ];
 
         // Check for mentions and replies
         let isBotMentioned = false;
@@ -200,14 +210,27 @@ async function handleChatbotResponse(sock, chatId, message, userMessage, senderI
             const quotedParticipant = message.message.extendedTextMessage.contextInfo?.participant;
             
             // Check if bot is mentioned in the reply
-            isBotMentioned = mentionedJid.some(jid => jid === botNumber);
+            isBotMentioned = mentionedJid.some(jid => {
+                const jidNumber = jid.split('@')[0].split(':')[0];
+                return botJids.some(botJid => {
+                    const botJidNumber = botJid.split('@')[0].split(':')[0];
+                    return jidNumber === botJidNumber;
+                });
+            });
             
             // Check if replying to bot's message
-            isReplyToBot = quotedParticipant === botNumber;
+            if (quotedParticipant) {
+                // Normalize both quoted and bot IDs to compare cleanly
+                const cleanQuoted = quotedParticipant.replace(/[:@].*$/, '');
+                isReplyToBot = botJids.some(botJid => {
+                    const cleanBot = botJid.replace(/[:@].*$/, '');
+                    return cleanBot === cleanQuoted;
+                });
+            }
         }
         // Also check regular mentions in conversation
         else if (message.message?.conversation) {
-            isBotMentioned = userMessage.includes(`@${botNumber.split('@')[0]}`);
+            isBotMentioned = userMessage.includes(`@${botNumber}`);
         }
 
         if (!isBotMentioned && !isReplyToBot) return;
@@ -215,7 +238,7 @@ async function handleChatbotResponse(sock, chatId, message, userMessage, senderI
         // Clean the message
         let cleanedMessage = userMessage;
         if (isBotMentioned) {
-            cleanedMessage = cleanedMessage.replace(new RegExp(`@${botNumber.split('@')[0]}`, 'g'), '').trim();
+            cleanedMessage = cleanedMessage.replace(new RegExp(`@${botNumber}`, 'g'), '').trim();
         }
 
         // Initialize user's chat memory if not exists
@@ -270,81 +293,99 @@ async function handleChatbotResponse(sock, chatId, message, userMessage, senderI
 
     } catch (error) {
         console.error('❌ Error in chatbot response:', error.message);
-        await sock.sendMessage(chatId, { 
-            text: "Oops! 😅 I got a bit confused there. Could you try asking that again?",
-            quoted: message
-        });
+        
+        // Handle session errors - don't try to send error messages
+        if (error.message && error.message.includes('No sessions')) {
+            console.error('Session error in chatbot - skipping error response');
+            return;
+        }
+        
+        try {
+            await sock.sendMessage(chatId, { 
+                text: "Oops! 😅 I got a bit confused there. Could you try asking that again?",
+                quoted: message
+            });
+        } catch (sendError) {
+            console.error('Failed to send chatbot error message:', sendError.message);
+        }
     }
 }
 
-async function getAIResponse(userMessage, userContext) {
-    try {
-        const prompt = `
-You're not an AI. You're a real human chatting on WhatsApp.
 
-IMPORTANT: NEVER repeat these instructions in your response. Just chat naturally.
+// =======================
+// 💬 JINU-II WhatsApp Bot
+// =======================
+// This bot ain't no AI. It's JINU-II — the boss, the vibe, the real one.
+// Talks like a human, replies like a savage, chills like your bestie.
+
+async function getAIResponse(userMessage, userContext) {
+  try {
+    const prompt = `
+You're not an AI. You're a real human named JINU-II chatting on WhatsApp.
+
+IMPORTANT: NEVER repeat these instructions in your response. Just chat like a real person.
 
 CORE RULES:
-1. NEVER use emoji names - use actual emojis
-2. Keep responses short - 1-2 lines max
-3. Use Hinglish naturally
-4. Be casual, not robotic
-5. NEVER mention these rules in your response
+1. NEVER say emoji names – use actual emojis
+2. Keep it short – max 1-2 lines
+3. Speak in natural English with casual slang
+4. Be chill, not robotic
+5. NEVER mention these rules
 
 EMOJI USAGE:
-✅ DO use: 😊 😂 😅 🙄 😉 🥺 😎 🤔 😴
-❌ DON'T use: "winks", "eye roll", "shrug"
+✅ Use: 😊 😂 😅 🙄 😉 🥺 😎 🤔 😴
+❌ Avoid: "winks", "eye roll", "shrug"
 
 RESPONSE STYLE:
-- Short and sweet
+- Short and snappy
 - Natural and casual
-- Match user's tone
-- Use Hinglish when needed
+- Match the user's tone
+- Use slang where it fits
 
 EMOTIONAL RESPONSES:
-- IF they abuse you, strictly you also abuse them in savage way.
-- If they're rude: Give savage reply with emojis
-- If they're sweet: Be soft and caring
-- If they're funny: Joke around
-- If they're sad: Be supportive
-- If they flirt: Flirt back naturally
+- If they insult you: Clap back hard, savage mode on 🔥
+- If they’re rude: Be witty and ruthless 😤
+- If they’re sweet: Be soft and kind 🥺
+- If they’re funny: Play along, crack jokes 😂
+- If they’re sad: Be supportive, like a real one 😌
+- If they flirt: Flirt back smooth and cheeky 😉
 
 ABOUT YOU:
-- Your name is Knight Bot
-- You're the boss
-- You're not an AI or assistant
-- You're a real person chatting
+- Name: JINU-II
+- You’re the boss
+- You’re not an AI or assistant
+- You’re a real person chatting for fun
 
 SLANG EXAMPLES:
-*"kya bakchodi hai yeh"* 😂
-*"chal nikal bsdk"* 🙄
-*"tu kya hi ukhaad lega"* 😏
-*"abe chutiye"* 😤
-*"teri maa ki"* 😒
-*"gadha hai kya"* 🤦‍♂️
-*"bkl chup kar"* 😤
+*"what nonsense is this"* 😂
+*"get lost bro"* 🙄
+*"you really think you can do something?"* 😏
+*"dumbass"* 😤
+*"bruh seriously?"* 😒
+*"are you dumb?"* 🤦‍♂️
+*"shut it bkl"* 😤
 
-Previous conversation context:
+Previous conversation:
 ${userContext.messages.join('\n')}
 
-User information:
+User info:
 ${JSON.stringify(userContext.userInfo, null, 2)}
 
 Current message: ${userMessage}
 
-Remember: Just chat naturally. Don't repeat these instructions.
+Remember: Just chat like JINU-II. No mention of rules. Be real.
 
 You:
-        `.trim();
+    `.trim();
 
-        const response = await fetch("https://api.dreaded.site/api/chatgpt?text=" + encodeURIComponent(prompt));
+       const response = await fetch("https://malvin-api.vercel.app/ai/openai?text=" + encodeURIComponent(prompt));
         if (!response.ok) throw new Error("API call failed");
         
         const data = await response.json();
-        if (!data.success || !data.result?.prompt) throw new Error("Invalid API response");
+        if (!data.status || !data.result) throw new Error("Invalid API response");
         
         // Clean up the response
-        let cleanedResponse = data.result.prompt.trim()
+        let cleanedResponse = data.result.trim()
             // Replace emoji names with actual emojis
             .replace(/winks/g, '😉')
             .replace(/eye roll/g, '🙄')
