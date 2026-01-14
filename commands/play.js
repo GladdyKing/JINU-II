@@ -8,67 +8,37 @@ async function playCommand(sock, chatId, message) {
         const searchQuery = text.split(' ').slice(1).join(' ').trim();
 
         if (!searchQuery) {
-            await sock.sendMessage(chatId, {
-                text:`╭──〔 🎧 ᴍᴜsɪᴄ ʀᴇǫᴜᴇsᴛ 〕──
-│
-├─ ᴡʜᴀᴛ sᴏɴɢ ᴅᴏ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ?
-│
-╰──〔 ⚙️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴊɪɴᴜ-ɪɪ 〕──`
-});
             return await sock.sendMessage(chatId, {
-                reaction: {
-                    text: '🎧',
-                    key: message.key
-}
+                text: "╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ᴅᴏᴡɴʟᴏᴀᴅ* ❍─╮\n│ ᴡʜᴀᴛ sᴏɴɢ ᴅᴏ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ?\n╰───────────────╯"
 });
 }
 
         const { videos} = await yts(searchQuery);
         if (!videos || videos.length === 0) {
             await sock.sendMessage(chatId, {
-                text:`╭──〔 ❌ ɴᴏ sᴏɴɢs ꜰᴏᴜɴᴅ 〕──
-│
-├─ ᴛʀʏ ᴀ ᴅɪꜰꜰᴇʀᴇɴᴛ ᴛɪᴛʟᴇ ᴏʀ ᴀʀᴛɪsᴛ.
-│
-╰──〔 ⚙️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴊɪɴᴜ-ɪɪ 〕──`
+                text: "╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ᴅᴏᴡɴʟᴏᴀᴅ* ❍─╮\n│ ɴᴏ sᴏɴɢs ғᴏᴜɴᴅ! 😞\n╰───────────────╯"
 });
             return await sock.sendMessage(chatId, {
-                reaction: {
-                    text: '❌',
-                    key: message.key
-}
+                react: { text: "❌", key: message.key}
 });
 }
 
         await sock.sendMessage(chatId, {
-            text: `╭──〔 ⏳ ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ ᴍᴜsɪᴄ 〕──
-│
-├─ ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ, ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ɪs ɪɴ ᴘʀᴏɢʀᴇss...
-│
-╰──〔 ⚙️ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴊɪɴᴜ-ɪɪ 〕──`
-});
-        await sock.sendMessage(chatId, {
-            reaction: {
-                text: '⏳',
-                key: message.key
-}
+            text: "╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ᴅᴏᴡɴʟᴏᴀᴅ* ❍─╮\n│ _ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ, ʏᴏᴜʀ ᴅᴏᴡɴʟᴏᴀᴅ ɪs ɪɴ ᴘʀᴏɢʀᴇss..._ ⏳\n╰───────────────╯"
 });
 
         const video = videos[0];
         const urlYt = video.url;
 
-        const response = await axios.get(`https://yt-dl.officialhectormanuel.workers.dev/?url=${urlYt}`);
+        const response = await axios.get(`https://apis-keith.vercel.app/download/dlmp3?url=${urlYt}`);
         const data = response.data;
 
         if (!data ||!data.status ||!data.result ||!data.result.downloadUrl) {
             await sock.sendMessage(chatId, {
-                text: "Failed to fetch audio from the API. Please try again later."
+                text: "╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ᴅᴏᴡɴʟᴏᴀᴅ* ❍─╮\n│ ғᴀɪʟᴇᴅ ᴛᴏ ғᴇᴛᴄʜ ᴀᴜᴅɪᴏ. ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ. 😔\n╰───────────────╯"
 });
             return await sock.sendMessage(chatId, {
-                reaction: {
-                    text: '⚠️',
-                    key: message.key
-}
+                react: { text: "❌", key: message.key}
 });
 }
 
@@ -76,28 +46,23 @@ async function playCommand(sock, chatId, message) {
         const title = data.result.title;
 
         await sock.sendMessage(chatId, {
-            audio: { url: audioUrl},
+            document: { url: audioUrl},
             mimetype: "audio/mpeg",
-            fileName: `${title}.mp3`
+            fileName: `${title}.mp3`,
+            caption: `╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ᴅᴏᴡɴʟᴏᴀᴅ* ❍─╮\n│ 🎵 ᴛɪᴛʟᴇ: *${title}*\n│ 💾 ғɪʟᴇ ᴛʏᴘᴇ: ᴀᴜᴅɪᴏ ᴅᴏᴄᴜᴍᴇɴᴛ\n╰───────────────╯`
 }, { quoted: message});
 
         await sock.sendMessage(chatId, {
-            reaction: {
-                text: '✅',
-                key: message.key
-}
+            react: { text: "✅", key: message.key}
 });
 
 } catch (error) {
-        console.error('Error in song2 command:', error);
+        console.error('Error in playCommand:', error);
         await sock.sendMessage(chatId, {
-            text: "Download failed. Please try again later."
+            text: "╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ᴅᴏᴡɴʟᴏᴀᴅ* ❍─╮\n│ ᴅᴏᴡɴʟᴏᴀᴅ ғᴀɪʟᴇᴅ. ᴘʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ. 😢\n╰───────────────╯"
 });
         await sock.sendMessage(chatId, {
-            reaction: {
-                text: '💥',
-                key: message.key
-}
+            react: { text: "❌", key: message.key}
 });
 }
 }
