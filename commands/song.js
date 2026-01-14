@@ -1,7 +1,9 @@
+
 const axios = require('axios');
 const yts = require('yt-search');
 const fs = require('fs');
 const path = require('path');
+const { toAudio} = require('../lib/converter');
 
 const AXIOS_DEFAULTS = {
 	timeout: 60000,
@@ -26,24 +28,22 @@ async function tryRequest(getter, attempts = 3) {
 	throw lastError;
 }
 
-async function getIzumiDownloadByUrl(youtubeUrl) {
-	const apiUrl = `https://izumiiiiiiii.dpdns.org/downloader/youtube?url=${encodeURIComponent(youtubeUrl)}&format=mp3`;
+async function getYupraDownloadByUrl(youtubeUrl) {
+	const apiUrl = `https://api.yupra.my.id/api/downloader/ytmp3?url=${encodeURIComponent(youtubeUrl)}`;
 	const res = await tryRequest(() => axios.get(apiUrl, AXIOS_DEFAULTS));
-	if (res?.data?.result?.download) return res.data.result;
-	throw new Error('Izumi youtube?url returned no download');
-}
-
-async function getIzumiDownloadByQuery(query) {
-	const apiUrl = `https://izumiiiiiiii.dpdns.org/downloader/youtube-play?query=${encodeURIComponent(query)}`;
-	const res = await tryRequest(() => axios.get(apiUrl, AXIOS_DEFAULTS));
-	if (res?.data?.result?.download) return res.data.result;
-	throw new Error('Izumi youtube-play returned no download');
+	if (res?.data?.success && res?.data?.data?.download_url) {
+		return {
+			download: res.data.data.download_url,
+			title: res.data.data.title,
+			thumbnail: res.data.data.thumbnail
+		};
+	}
+	throw new Error('Yupra returned no download');
 }
 
 async function getOkatsuDownloadByUrl(youtubeUrl) {
 	const apiUrl = `https://okatsu-rolezapiiz.vercel.app/downloader/ytmp3?url=${encodeURIComponent(youtubeUrl)}`;
 	const res = await tryRequest(() => axios.get(apiUrl, AXIOS_DEFAULTS));
-	// Okatsu response shape: { status, creator, title, format, thumb, duration, cached, dl }
 	if (res?.data?.dl) {
 		return {
 			download: res.data.dl,
@@ -55,71 +55,190 @@ async function getOkatsuDownloadByUrl(youtubeUrl) {
 }
 
 async function songCommand(sock, chatId, message) {
-    try {
-        const text = message.message?.conversation || message.message?.extendedTextMessage?.text || '';
-        if (!text) {
-            await sock.sendMessage(chatId, { text: 'Usage: .song <song name or YouTube link>' }, { quoted: message });
-            return;
-        }
+	try {
+		const text = message.message?.conversation || message.message?.extendedTextMessage?.text || '';
+		if (!text) {
+			await sock.sendMessage(chatId, {
+				text: '╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ʙᴏᴛ* ❍─╮\n│ ᴜsᴀɢᴇ:.sᴏɴɢ <sᴏɴɢ ɴᴀᴍᴇ ᴏʀ ʏᴛ ʟɪɴᴋ>\n╰────────────────╯'
+			}, { quoted: message});
+			return;
+		}
 
-        let video;
-        if (text.includes('youtube.com') || text.includes('youtu.be')) {
-			video = { url: text };
-        } else {
+		let video;
+		if (text.includes('youtube.com') || text.includes('youtu.be')) {
+			video = { url: text};
+		} else {
 			const search = await yts(text);
-			if (!search || !search.videos.length) {
-                await sock.sendMessage(chatId, { text: 'No results found.' }, { quoted: message });
-                return;
-            }
-			video = search.videos[0];
-        }
-
-        // Inform user
-        await sock.sendMessage(chatId, {
-            image: { url: video.thumbnail },
-            caption: `╭──〔 😎ᴊɪɴᴜ-ɪɪ sᴏɴɢ ᴅʟ😎 〕──
-│
-├─📍ᴛɪᴛʟᴇ :  ${video.title}
-├─⏱ ᴅᴜʀᴀᴛɪᴏɴ: ${video.timestamp}
-│
-├─🔮ᴡᴀɪᴛ :
-│ʏᴏᴜʀ sᴏɴɢ ɪs ʙᴇɪɴɢ ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ
-│
-├─🇿🇼ᴇɴᴊᴏʏ: 
-│ʏᴏᴜ ᴄʜᴏsᴇ ᴊɪɴᴜ-ɪɪ ,ᴇɴᴊᴏʏ ᴛʜᴇ ᴠɪʙᴇ😎
-│
-╰──〔 🎤 ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴊɪɴᴜ-ɪɪ 〕──
-            
-> ᴄʀᴇᴀᴛᴇᴅ ʙʏ ᴅᴀᴠɪsᴏɴ ɢʟᴀᴅsᴏɴ`
-        }, { quoted: message });
-
-		// Try Izumi primary by URL, then by query, then Okatsu fallback
-		let audioData;
-		try {
-			// 1) Primary: Izumi by youtube url
-			audioData = await getIzumiDownloadByUrl(video.url);
-		} catch (e1) {
-			try {
-				// 2) Secondary: Izumi search by query/title
-				const query = video.title || text;
-				audioData = await getIzumiDownloadByQuery(query);
-			} catch (e2) {
-				// 3) Fallback: Okatsu by youtube url
-				audioData = await getOkatsuDownloadByUrl(video.url);
+			if (!search ||!search.videos.length) {
+				await sock.sendMessage(chatId, {
+					text: '╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ʙᴏᴛ* ❍─╮\n│ ɴᴏ ʀᴇsᴜʟᴛs ғᴏᴜɴᴅ. 😞\n╰────────────────╯'
+				}, { quoted: message});
+				await sock.sendMessage(chatId, {
+					react: { text: '❌', key: message.key}
+				});
+				return;
 			}
+			video = search.videos[0];
 		}
 
 		await sock.sendMessage(chatId, {
-			audio: { url: audioData.download || audioData.dl || audioData.url },
-			mimetype: 'audio/mpeg',
-			fileName: `${(audioData.title || video.title || 'song')}.mp3`,
-			ptt: false
-		}, { quoted: message });
+			image: { url: video.thumbnail},
+			caption:
+`╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ᴅᴏᴡɴʟᴏᴀᴅ* ❍─╮
+│ 🎵 ᴛɪᴛʟᴇ: *${video.title}*
+│ ⏱ ᴅᴜʀᴀᴛɪᴏɴ: ${video.timestamp}
+│ 📅 ᴘᴜʙʟɪsʜᴇᴅ: ${video.ago}
+│ 🎧 ɢᴇɴʀᴇ: ᴍᴜsɪᴄ
+│ 💿 ᴀʟʙᴜᴍ: ɴ/ᴀ
+│ 👤 ᴀᴜᴛʜᴏʀ: ${video.author.name}
+│ 👁️ ᴠɪᴇᴡs: ${video.views.toLocaleString()}
+│ 🙋‍♂️ ʀᴇQᴜᴇsᴛᴇʀ: @${message.key.participant?.split('@')[0] || 'ᴜɴᴋɴᴏᴡɴ'}
+│ 🔗 ʟɪɴᴋ: ${video.url}
+╰───────────────╯
+_ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴀᴠɪsᴏɴ ɢʟᴀᴅsᴏɴ_`
+		}, { quoted: message});
 
-    } catch (err) {
-        console.error('Song command error:', err);
-        await sock.sendMessage(chatId, { text: '❌ Failed to download song.' }, { quoted: message });
-    }
+		let audioData;
+		try {
+			audioData = await getYupraDownloadByUrl(video.url);
+		} catch {
+			audioData = await getOkatsuDownloadByUrl(video.url);
+		}
+
+		const audioUrl = audioData.download || audioData.dl || audioData.url;
+
+		let audioBuffer;
+		try {
+			const audioResponse = await axios.get(audioUrl, {
+				responseType: 'arraybuffer',
+				timeout: 90000,
+				maxContentLength: Infinity,
+				maxBodyLength: Infinity,
+				decompress: true,
+				validateStatus: s => s>= 200 && s < 400,
+				headers: {
+					'User-Agent': AXIOS_DEFAULTS.headers['User-Agent'],
+					'Accept': '*/*',
+                    'Accept-Encoding': 'identity'
+				}
+			});
+			audioBuffer = Buffer.from(audioResponse.data);
+		} catch {
+			const audioResponse = await axios.get(audioUrl, {
+				responseType: 'stream',
+				timeout: 90000,
+				maxContentLength: Infinity,
+				maxBodyLength: Infinity,
+				validateStatus: s => s>= 200 && s < 400,
+				headers: {
+					'User-Agent': AXIOS_DEFAULTS.headers['User-Agent'],
+					'Accept': ' _/_ ',
+					'Accept-Encoding': 'identity'
+				}
+			});
+			const chunks = [];
+			await new Promise((resolve, reject) => {
+				audioResponse.data.on('data', c => chunks.push(c));
+				audioResponse.data.on('end', resolve);
+				audioResponse.data.on('error', reject);
+			});
+			audioBuffer = Buffer.concat(chunks);
+		}
+
+		if (!audioBuffer || audioBuffer.length === 0) {
+			throw new Error('Downloaded audio buffer is empty');
+		}
+
+		const firstBytes = audioBuffer.slice(0, 12);
+		const hexSignature = firstBytes.toString('hex');
+		const asciiSignature = firstBytes.toString('ascii', 4, 8);
+
+		let actualMimetype = 'audio/mpeg';
+		let fileExtension = 'mp3';
+
+		if (asciiSignature === 'ftyp' || hexSignature.startsWith('000000')) {
+			const ftypBox = audioBuffer.slice(4, 8).toString('ascii');
+			if (ftypBox === 'ftyp') {
+				actualMimetype = 'audio/mp4';
+				fileExtension = 'm4a';
+			}
+		} else if (audioBuffer.toString('ascii', 0, 3) === 'ID3' ||
+		           (audioBuffer[0] === 0xFF && (audioBuffer[1] & 0xE0) === 0xE0)) {
+			actualMimetype = 'audio/mpeg';
+			fileExtension = 'mp3';
+		} else if (audioBuffer.toString('ascii', 0, 4) === 'OggS') {
+			actualMimetype = 'audio/ogg; codecs=opus';
+			fileExtension = 'ogg';
+		} else if (audioBuffer.toString('ascii', 0, 4) === 'RIFF') {
+			actualMimetype = 'audio/wav';
+			fileExtension = 'wav';
+		} else {
+			actualMimetype = 'audio/mp4';
+			fileExtension = 'm4a';
+		}
+
+		// Convert to MP3 if not already MP3
+		let finalBuffer = audioBuffer;
+		let finalMimetype = 'audio/mpeg';
+		let finalExtension = 'mp3';
+
+		if (fileExtension!== 'mp3') {
+			try {
+				finalBuffer = await toAudio(audioBuffer, fileExtension);
+				if (!finalBuffer || finalBuffer.length === 0) {
+					throw new Error('Conversion returned empty buffer');
+				}
+			} catch (convErr) {
+				throw new Error(`Failed to convert ${detectedFormat} to MP3: ${convErr.message}`);
+			}
+		}
+
+		// Send as audio document with JINU style
+		await sock.sendMessage(chatId, {
+			document: finalBuffer,
+			mimetype: finalMimetype,
+			fileName: `${(audioData.title || video.title || 'song')}.${finalExtension}`,
+			caption:
+`╭─❍ *ᴊɪɴᴜ ᴀᴜᴅɪᴏ ᴅᴏᴄ* ❍─╮
+│ 🎵 ғɪʟᴇ: *${video.title}*
+│ 📁 ғᴏʀᴍᴀᴛ: ᴍᴘ3 ᴅᴏᴄᴜᴍᴇɴᴛ
+│ 🙋‍♂️ ʀᴇQᴜᴇsᴛᴇʀ: @${message.key.participant?.split('@')[0] || 'ᴜɴᴋɴᴏᴡɴ'}
+╰───────────────╯
+_ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴀᴠɪsᴏɴ ɢʟᴀᴅsᴏɴ_`
+		}, { quoted: message});
+
+		await sock.sendMessage(chatId, {
+			react: { text: '✅', key: message.key}
+		});
+
+		// Cleanup: Delete temp files created during conversion
+		try {
+			const tempDir = path.join(__dirname, '../temp');
+			if (fs.existsSync(tempDir)) {
+				const files = fs.readdirSync(tempDir);
+				const now = Date.now();
+				files.forEach(file => {
+					const filePath = path.join(tempDir, file);
+					try {
+						const stats = fs.statSync(filePath);
+						if (now - stats.mtimeMs> 10000 &&
+							(file.endsWith('.mp3') || file.endsWith('.m4a') || /^\d+\.(mp3|m4a)$/.test(file))) {
+							fs.unlinkSync(filePath);
+						}
+					} catch {}
+				});
+			}
+		} catch {}
+
+	} catch (err) {
+		console.error('Song command error:', err);
+		await sock.sendMessage(chatId, {
+			text: '╭─❍ *ᴊɪɴᴜ ᴍᴜsɪᴄ ʙᴏᴛ* ❍─╮\n│ ❌ ғᴀɪʟᴇᴅ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ sᴏɴɢ.\n╰────────────────╯'
+		}, { quoted: message});
+		await sock.sendMessage(chatId, {
+			react: { text: '❌', key: message.key}
+		});
+	}
 }
 
 module.exports = songCommand;
