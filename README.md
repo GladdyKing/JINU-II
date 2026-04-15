@@ -241,7 +241,7 @@
 
 > Fast authentication — no QR code needed
 
-[![Get Pairing Code](https://img.shields.io/badge/Get%20Pairing%20Code-orange?style=for-the-badge&logo=whatsapp&logoColor=white)](https://jinu-ii.vercel.app/)
+[![Get Pairing Code](https://img.shields.io/badge/Get%20Pairing%20Code-orange?style=for-the-badge&logo=whatsapp&logoColor=white)](https://jinu-ii-pair.vercel.app/)
 
 [![divider](https://i.imgur.com/dBaSKWF.gif)](https://i.imgur.com/dBaSKWF.gif)
 
