@@ -20,8 +20,65 @@
 
 **JINU-II** is a fast, Baileys-based WhatsApp bot with **100+ commands**: AI chat, media downloads, group management, protection tools, games and more. Log in with a pairing code (no QR scan), deploy on any panel or VPS, and send **`.menu`** in WhatsApp to see everything.
 
-| Category | What you get | Try |
-|---|---|---|
+### 🧠 Bot Map
+
+```mermaid
+mindmap
+  root((JINU-II))
+    🤖 AI
+      Gemini and GPT chat
+      Image generation
+      Translator
+    📥 Downloads
+      YouTube
+      TikTok
+      Instagram
+      Spotify
+    👥 Groups
+      Kick and promote
+      Tag all
+      Warnings
+    🛡️ Protection
+      Anti-link
+      Anti-delete
+      Anti-call
+    🎨 Media
+      Stickers
+      OCR
+      QR codes
+    🎮 Fun
+      TicTacToe
+      Hangman
+      Trivia
+    🛠️ Tools
+      Weather
+      Crypto
+      Converter
+```
+
+### 💬 See It In Action
+
+```text
+👤 You        .ai write me a short poem about coding
+🤖 JINU-II    ⏳ Thinking...
+🤖 JINU-II    ✅ Here you go! (AI reply appears here)
+
+👤 You        .ytv <youtube link>
+🤖 JINU-II    📥 Downloading... ✅ Sent!
+
+👤 You        .menu
+🤖 JINU-II    📋 Full command list loaded
+```
+
+<div align="center">
+
+| ⚡ | 🔐 | 🆓 | 🤖 |
+|:---:|:---:|:---:|:---:|
+| **100+**<br/>Commands | **Pairing code**<br/>No QR needed | **Free-tier**<br/>Deploy anywhere | **Always on**<br/>24/7 on a panel |
+
+</div>
+
+---|---|---|
 | 🤖 **AI** | Gemini and GPT chat, image generation, translator, summarizer | `.ai` `.gpt` `.imagine` |
 | 📥 **Downloads** | YouTube, TikTok, Instagram, Facebook, Spotify, APK and more | `.ytv` `.tiktok` `.play` |
 | 👥 **Groups** | Kick, promote, tag all, warnings, invite links | `.kick` `.tagall` `.warn` |
@@ -34,14 +91,6 @@
 ---
 
 ## 🚀 Get Started
-
-```mermaid
-flowchart LR
-    A([🍴 Fork the repo]) --> B([🌐 Get pairing code])
-    B --> C["⚙️ npm install + npm start"]
-    C --> D([📱 Link device in WhatsApp])
-    D --> E([✅ Bot online])
-```
 
 <div align="center">
 
@@ -83,12 +132,16 @@ npm start
 <div align="center">
 
 ### **GladdyKing**
-*Bot Developer • Tech Explorer • Full Stack Learner*
+*Bot Developer • Web Developer • App Developer • Tech Explorer*
 
 [![GitHub](https://img.shields.io/badge/GitHub-GladdyKing-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/GladdyKing)
 [![YouTube](https://img.shields.io/badge/YouTube-GLADDYTECH-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@GLADDYTECH)
 [![WhatsApp Channel](https://img.shields.io/badge/WhatsApp-Channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029VaYwGzn5kg73jDMgMh2J)
 
+![Web Dev](https://img.shields.io/badge/Web%20Developer-0EA5E9?style=flat-square&logo=googlechrome&logoColor=white)
+![App Dev](https://img.shields.io/badge/App%20Developer-7C3AED?style=flat-square&logo=android&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
@@ -97,10 +150,13 @@ npm start
 
 </div>
 
-### 🧬 About Me
+### 🧬 What I Do
 
-- 💻 I build **WhatsApp bots** and explore new tech
-- 📚 Currently learning **full stack development** (on a study break until **Nov 2026**)
+- 🤖 I build **WhatsApp bots**
+- 🌐 I build **websites and web apps** as a web developer
+- 📱 I build **mobile apps** as an app developer
+- 📚 Growing into **full stack development** (on a study break until **Nov 2026**)
+- 🧭 Always exploring new tech
 - 🎥 I share tech content on YouTube as **GLADDYTECH**
 - 🔥 My bots are popular in the local WhatsApp bot community
 
