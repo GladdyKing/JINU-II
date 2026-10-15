@@ -2,377 +2,142 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,12,24&height=280&section=header&text=JINU-II&fontSize=95&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=FAST%20⚡%20SECURE%20🔒%20RELIABLE%20✅&descSize=22&descAlignY=60" width="100%"/>
 
-<a href="https://git.io/typing-svg">
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=26&duration=3000&pause=900&color=00FF9C&center=true&vCenter=true&width=720&height=60&lines=⚡+THE+MOST+POWERFUL+WHATSAPP+BOT;🤖+100%2B+COMMANDS+•+ONE+PREFIX;🚀+DEPLOY+IN+MINUTES+•+PAIRING+CODE+LOGIN;💻+BUILT+BY+MR+GLADDYKING;⭐+DROP+A+STAR+•+🍴+FORK+THE+REPO" alt="Typing SVG"/>
-</a>
-
-<br/>
-
 [![Stars](https://img.shields.io/github/stars/GladdyKing/JINU-II?style=for-the-badge&color=FFD600&logo=github&logoColor=white&label=STARS)](https://github.com/GladdyKing/JINU-II/stargazers)
 [![Forks](https://img.shields.io/github/forks/GladdyKing/JINU-II?style=for-the-badge&color=1E88E5&logo=github&logoColor=white&label=FORKS)](https://github.com/GladdyKing/JINU-II/fork)
 [![Followers](https://img.shields.io/github/followers/GladdyKing?style=for-the-badge&color=43A047&logo=github&logoColor=white&label=FOLLOWERS)](https://github.com/GladdyKing)
 [![Last Commit](https://img.shields.io/github/last-commit/GladdyKing/JINU-II?style=for-the-badge&color=8E24AA&logo=git&logoColor=white&label=LAST%20COMMIT)](https://github.com/GladdyKing/JINU-II/commits/main)
-[![Repo Size](https://img.shields.io/github/repo-size/GladdyKing/JINU-II?style=for-the-badge&color=0097A7&logo=database&logoColor=white&label=SIZE)](https://github.com/GladdyKing/JINU-II)
 
-<br/>
-
-**[✨ Features](#-what-it-can-do)** &nbsp;•&nbsp;
-**[📚 Commands](#-all-100-commands)** &nbsp;•&nbsp;
-**[🌐 Pairing](#-get-your-pairing-code)** &nbsp;•&nbsp;
-**[🚀 Deploy](#-deployment)** &nbsp;•&nbsp;
-**[💬 Support](#-join-the-community)**
-
-</div>
-
-<br/>
-
-<div align="center">
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=14&duration=2500&pause=600&color=7C3AED&center=true&vCenter=true&width=500&height=30&lines=%24+git+clone+GladdyKing%2FJINU-II;%24+npm+install;%24+npm+start;✅+Connected+Successfully" alt="Terminal animation"/>
-</div>
-
----
-
-## ✨ What It Can Do
-
-<div align="center">
-
-<table>
-  <tr>
-    <td align="center" width="20%">📋<br/><b>Menu</b><br/><sub>Full command list</sub></td>
-    <td align="center" width="20%">🤖<br/><b>AI ChatBot</b><br/><sub>Gemini • GPT • Imagine</sub></td>
-    <td align="center" width="20%">📥<br/><b>Downloads</b><br/><sub>YT • TikTok • IG • FB</sub></td>
-    <td align="center" width="20%">👥<br/><b>Group Tools</b><br/><sub>Kick • Tagall • Warn</sub></td>
-    <td align="center" width="20%">🛡️<br/><b>Anti-Delete</b><br/><sub>Recover messages</sub></td>
-  </tr>
-  <tr>
-    <td align="center">🎨<br/><b>Stickers</b><br/><sub>Image • Video • Tags</sub></td>
-    <td align="center">🎮<br/><b>Fun & Games</b><br/><sub>TTT • Hangman • Trivia</sub></td>
-    <td align="center">⚙️<br/><b>Auto Features</b><br/><sub>Status • Typing • React</sub></td>
-    <td align="center">🎬<br/><b>Media Tools</b><br/><sub>Convert & fetch</sub></td>
-    <td align="center">🖼️<br/><b>Image Tools</b><br/><sub>OCR • QR • Blur</sub></td>
-  </tr>
-  <tr>
-    <td align="center">✍️<br/><b>Text Tools</b><br/><sub>TTS • Fancy • Morse</sub></td>
-    <td align="center">💰<br/><b>Economy</b><br/><sub>Crypto • Currency</sub></td>
-    <td align="center">🕌<br/><b>Islamic</b><br/><sub>Prayer times • Quran</sub></td>
-    <td align="center">🔎<br/><b>Search</b><br/><sub>Google • Wikipedia</sub></td>
-    <td align="center">👑<br/><b>Owner Tools</b><br/><sub>Ban • PM blocker</sub></td>
-  </tr>
-</table>
+**[⚡ About](#-about-the-bot)** &nbsp;•&nbsp;
+**[🚀 Get Started](#-get-started)** &nbsp;•&nbsp;
+**[👑 The Developer](#-meet-the-developer)** &nbsp;•&nbsp;
+**[💬 Community](#-community)**
 
 </div>
 
 ---
 
-## 📚 All 100 Commands
+## ⚡ About The Bot
 
-> Prefix is **`.`** — tap a category to expand it.
+**JINU-II** is a fast, Baileys-based WhatsApp bot with **100+ commands**: AI chat, media downloads, group management, protection tools, games and more. Log in with a pairing code (no QR scan), deploy on any panel or VPS, and send **`.menu`** in WhatsApp to see everything.
 
-<details>
-<summary><b>🤖 AI & INTELLIGENCE</b> &nbsp;<sub>1–15</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.ai` | Gemini AI chat |
-| `.gpt` | GPT-powered replies |
-| `.imagine` | AI image generation |
-| `.chatbot on/off` | Group chatbot mode |
-| `.summarize` | AI text summarizer |
-| `.translate` | AI language translator |
-| `.aijoke` | AI joke generator |
-| `.story` | AI story writer |
-| `.lyrics` | AI lyrics finder |
-| `.triviaai` | AI trivia answer helper |
-| `.roast` | AI roast generator |
-| `.compliment` | AI compliment generator |
-| `.advice` | AI advice bot |
-| `.define` | AI definition lookup |
-| `.fact` | AI random fact generator |
-
-</details>
-
-<details>
-<summary><b>📥 DOWNLOADERS</b> &nbsp;<sub>16–30</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.ytv` | YouTube video download |
-| `.yta` | YouTube audio download |
-| `.tiktok` | TikTok video download |
-| `.ig` | Instagram reel/post download |
-| `.fb` | Facebook video download |
-| `.twitter` | Twitter/X video download |
-| `.spotify` | Spotify track download |
-| `.sc` | SoundCloud track download |
-| `.mediafire` | MediaFire file download |
-| `.pin` | Pinterest image download |
-| `.play` | Song search + download |
-| `.song` | Song audio 3-type selector |
-| `.github` | GitHub repo info fetcher |
-| `.apk` | APK file downloader |
-| `.dl` | Direct URL media fetch |
-
-</details>
-
-<details>
-<summary><b>👥 GROUP MANAGEMENT</b> &nbsp;<sub>31–45</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.kick` | Kick member from group |
-| `.add` | Add member to group |
-| `.promote` | Promote member to admin |
-| `.demote` | Demote admin to member |
-| `.mute` | Mute group (close) |
-| `.unmute` | Unmute group (open) |
-| `.groupname` | Change group name |
-| `.desc` | Change group description |
-| `.seticon` | Change group profile photo |
-| `.link` | Get group invite link |
-| `.revoke` | Revoke group invite link |
-| `.groupinfo` | Get full group info |
-| `.tagall` | Tag all group members |
-| `.warn` | Warn a member |
-| `.warnings` | Check member warn count |
-
-</details>
-
-<details>
-<summary><b>🛡️ AUTO PROTECTION</b> &nbsp;<sub>46–55</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.antilink on/off` | Anti-link (blocks all links) |
-| `.antibadword on/off` | Anti-bad word filter |
-| `.antidelete on/off` | Anti-delete (recover msgs) |
-| `.antitag on/off` | Anti-tag spam |
-| `.anticall on/off` | Anti-call (auto-reject) |
-| `.antidemote on/off` | Anti-demote (re-promote self) |
-| `.pmblocker on/off` | Private message blocker |
-| `.welcome on/off` | Custom welcome message |
-| `.goodbye on/off` | Custom goodbye message |
-| `.ban` | Ban user from using bot |
-
-</details>
-
-<details>
-<summary><b>⚙️ AUTO FEATURES</b> &nbsp;<sub>56–63</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.autostatus on/off` | Auto status view & react |
-| `.autotyping on/off` | Auto typing indicator |
-| `.autoread on/off` | Auto read all messages |
-| `.savestatuses on/off` | Auto status save |
-| `.autoreact on/off` | Auto react with emojis |
-| *(built-in)* | Auto newsletter follow on connect |
-| *(built-in)* | Startup banner DM to owner |
-| *(built-in)* | RAM auto-monitor & restart |
-
-</details>
-
-<details>
-<summary><b>🎨 STICKERS & 🖼️ IMAGE TOOLS</b> &nbsp;<sub>64–74</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.sticker` | Image to WhatsApp sticker |
-| `.vsticker` | Video to animated sticker |
-| `.toimg` | Sticker back to image |
-| `.sticktag` | Add sticker pack name/tag |
-| `.stickintro` | Sticker intro maker |
-| `.grey` | Convert image to greyscale |
-| `.ocr` | Read text from image |
-| `.qr` | Generate QR code from text |
-| `.readqr` | Read/decode QR code |
-| `.faceswap` | AI face swap |
-| `.blur` | Blur an image |
-
-</details>
-
-<details>
-<summary><b>🎮 GAMES</b> &nbsp;<sub>75–79</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.hangman` | Hangman word game |
-| `.trivia` | Trivia quiz game |
-| `.ttt` | TicTacToe multiplayer |
-| `.tod` | Truth or Dare |
-| `.wyr` | Would You Rather |
-
-</details>
-
-<details>
-<summary><b>🛠️ UTILITIES</b> &nbsp;<sub>80–89</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.ping` | Bot ping & response speed |
-| `.alive` | Bot alive status with image |
-| `.menu` | Full command menu |
-| `.fakevcard` | Generate fake vCard contact |
-| `.userinfo` | Get WhatsApp user info |
-| `.uptime` | Bot uptime checker |
-| `.ss` | Screenshot any website |
-| `.shorten` | Short URL generator |
-| `.b64` | Encode/decode base64 text |
-| `.weather` | Live weather info |
-
-</details>
-
-<details>
-<summary><b>✍️ TEXT TOOLS</b> &nbsp;<sub>90–94</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.tts` | Text to speech |
-| `.fancy` | Fancy Unicode text styles |
-| `.reverse` | Reverse any text |
-| `.case` | Text case changer |
-| `.morse` | Morse code encoder/decoder |
-
-</details>
-
-<details>
-<summary><b>💰 ECONOMY • 🔎 SEARCH • 🕌 ISLAMIC</b> &nbsp;<sub>95–100</sub></summary>
-<br/>
-
-| Command | What it does |
-|---|---|
-| `.crypto` | Live crypto price checker |
-| `.convert` | Currency converter |
-| `.google` | Google web search |
-| `.wiki` | Wikipedia article search |
-| `.prayer` | Islamic daily prayer times |
-| `.quran` | Random Quran verse |
-
-</details>
+| Category | What you get | Try |
+|---|---|---|
+| 🤖 **AI** | Gemini and GPT chat, image generation, translator, summarizer | `.ai` `.gpt` `.imagine` |
+| 📥 **Downloads** | YouTube, TikTok, Instagram, Facebook, Spotify, APK and more | `.ytv` `.tiktok` `.play` |
+| 👥 **Groups** | Kick, promote, tag all, warnings, invite links | `.kick` `.tagall` `.warn` |
+| 🛡️ **Protection** | Anti-link, anti-delete, anti-call, anti-tag, bad-word filter | `.antilink` `.antidelete` |
+| ⚙️ **Automation** | Auto status view and react, auto typing, auto read | `.autostatus` `.autoreact` |
+| 🎨 **Media** | Stickers, OCR, QR codes, face swap, blur | `.sticker` `.ocr` `.qr` |
+| 🎮 **Fun** | TicTacToe, hangman, trivia, truth or dare | `.ttt` `.hangman` `.tod` |
+| 🛠️ **Tools** | Weather, crypto, converter, TTS, Wikipedia, prayer times | `.weather` `.crypto` `.wiki` |
 
 ---
 
-## 🍴 Fork It
+## 🚀 Get Started
 
-<div align="center">
-
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=20&duration=2500&color=00FF9C&center=true&vCenter=true&width=600&lines=🍴+FORK+→+⭐+STAR+→+🚀+DEPLOY;SUPPORT+THE+PROJECT+WITH+A+STAR+⭐" alt="Fork animation"/>
-
-<br/>
-
-[![Fork JINU-II](https://img.shields.io/github/forks/GladdyKing/JINU-II?style=for-the-badge&logo=github&color=4c1&label=Fork%20JINU-II)](https://github.com/GladdyKing/JINU-II/fork)
-[![Star JINU-II](https://img.shields.io/github/stars/GladdyKing/JINU-II?style=for-the-badge&logo=github&color=FFD600&label=Star%20JINU-II)](https://github.com/GladdyKing/JINU-II/stargazers)
-
-</div>
-
----
-
-## 🌐 Get Your Pairing Code
-
-> Fast authentication, no QR code needed.
+```mermaid
+flowchart LR
+    A([🍴 Fork the repo]) --> B([🌐 Get pairing code])
+    B --> C["⚙️ npm install + npm start"]
+    C --> D([📱 Link device in WhatsApp])
+    D --> E([✅ Bot online])
+```
 
 <div align="center">
 
 [![Get Pairing Code](https://img.shields.io/badge/GET%20PAIRING%20CODE-FF9800?style=for-the-badge&logo=whatsapp&logoColor=white)](https://jinu-ii-pair.vercel.app/)
+[![Download ZIP](https://img.shields.io/badge/DOWNLOAD%20BOT%20ZIP-FF0000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/GladdyKing/JINU-II/archive/refs/heads/main.zip)
+[![Fork](https://img.shields.io/badge/FORK%20THE%20REPO-4c1?style=for-the-badge&logo=github&logoColor=white)](https://github.com/GladdyKing/JINU-II/fork)
 
 </div>
-
----
-
-## 🚀 Deployment
-
-<div align="center">
-
-[![Download Bot ZIP](https://img.shields.io/badge/DOWNLOAD%20BOT%20ZIP-FF0000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/GladdyKing/JINU-II/archive/refs/heads/main.zip)
-
-</div>
-
-**Host on panel / VPS / Discord.** Download the latest ZIP for panel-based deployment and run it on any panel service you like.
-
-### 🛠️ Quick Start
 
 ```bash
-# 1. Clone the repo
 git clone https://github.com/GladdyKing/JINU-II
 cd JINU-II
-
-# 2. Install dependencies
 npm install
-
-# 3. Start the bot
 npm start
-
-# 4. Enter the pairing code shown in terminal into:
-#    WhatsApp → Linked Devices → Link a Device
+# Enter the pairing code in WhatsApp → Linked Devices → Link a Device
 ```
 
-> 🔧 *All panel issues fixed. Deploy to any free-tier server.*
-
----
-
-## 🤖 Bot Status
-
-<div align="center">
+> 🔧 Works on any panel, VPS or free-tier server.
 
 | | |
 |---|---|
 | 🟢 **Status** | Active |
-| 🏷️ **Version** | V.2.0.0 — Gladdy Edition |
-| 🧩 **Framework** | Gladdy Framework (GladdyKing) |
+| 🏷️ **Version** | V.2.0.0, Gladdy Edition |
+| 🧩 **Framework** | Gladdy Framework |
 | 📜 **License** | MIT |
 | 🔹 **Prefix** | `.` |
-| ⚡ **Commands** | 100+ |
 | 🟩 **Node.js** | >= 18.0.0 |
 
-</div>
-
 ---
-
-## 💬 Join The Community
-
-> 🔔 Stay connected for updates, feature drops and tutorials.
 
 <div align="center">
 
-[![WhatsApp Channel](https://img.shields.io/badge/JOIN%20WHATSAPP%20CHANNEL-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029VaYwGzn5kg73jDMgMh2J)
-[![GitHub](https://img.shields.io/badge/FOLLOW%20ON%20GITHUB-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/GladdyKing)
+<img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=12,20,24&height=110&section=header&text=MEET%20THE%20DEVELOPER&fontSize=38&fontColor=ffffff&animation=twinkling" width="100%"/>
 
 </div>
 
----
-
-## 👑 Creator
+## 👑 Meet The Developer
 
 <div align="center">
 
-**Built with ❤️ by Gladdy King**
+### **GladdyKing**
+*Bot Developer • Tech Explorer • Full Stack Learner*
 
-Core features • Gladdy Framework • plugin architecture • deployment tools • 100+ commands
+[![GitHub](https://img.shields.io/badge/GitHub-GladdyKing-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/GladdyKing)
+[![YouTube](https://img.shields.io/badge/YouTube-GLADDYTECH-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@GLADDYTECH)
+[![WhatsApp Channel](https://img.shields.io/badge/WhatsApp-Channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029VaYwGzn5kg73jDMgMh2J)
 
-<br/>
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
+![WhatsApp](https://img.shields.io/badge/Baileys-25D366?style=flat-square&logo=whatsapp&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 
-[![GladdyKing Stats](https://github-readme-stats.vercel.app/api?username=GladdyKing&show_icons=true&theme=tokyonight&hide_border=true&count_private=true)](https://github.com/GladdyKing)
+</div>
+
+### 🧬 About Me
+
+- 💻 I build **WhatsApp bots** and explore new tech
+- 📚 Currently learning **full stack development** (on a study break until **Nov 2026**)
+- 🎥 I share tech content on YouTube as **GLADDYTECH**
+- 🔥 My bots are popular in the local WhatsApp bot community
+
+### 🤖 My Bots
+
+All Baileys-based, all with 100+ commands (downloads, AI chat, group management, fun commands):
+
+| Bot | Description |
+|---|---|
+| ⚡ **JINU-II** | The one you're looking at, my flagship bot |
+| 👑 **GLADDY-XD** | The original Gladdy bot |
+| 🌸 **RUMI-MINI** | Lightweight version |
+| 🔥 **AKAZA-MD** | Multi-device bot with pairing code login |
+
+> More on my profile: [github.com/GladdyKing?tab=repositories](https://github.com/GladdyKing?tab=repositories)
+
+<div align="center">
+
+[![GladdyKing Stats](https://github-readme-stats.vercel.app/api?username=GladdyKing&show_icons=true&theme=tokyonight&hide_border=true)](https://github.com/GladdyKing)
 [![Streak Stats](https://streak-stats.demolab.com?user=GladdyKing&theme=tokyonight&hide_border=true)](https://github.com/GladdyKing)
 
 </div>
 
 ---
 
-## 💫 Thanks To Our Loyal Followers
+## 💬 Community
+
+> 🔔 Updates, new features and tutorials: join the channel and subscribe on YouTube.
 
 <div align="center">
 
-[![Stargazers](http://reporoster.com/stars/dark/GladdyKing/JINU-II)](https://github.com/GladdyKing/JINU-II/stargazers)
+[![WhatsApp Channel](https://img.shields.io/badge/JOIN%20WHATSAPP%20CHANNEL-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://whatsapp.com/channel/0029VaYwGzn5kg73jDMgMh2J)
+[![Subscribe](https://img.shields.io/badge/SUBSCRIBE%20ON%20YOUTUBE-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@GLADDYTECH)
 
-[![Forkers](http://reporoster.com/forks/dark/GladdyKing/JINU-II)](https://github.com/GladdyKing/JINU-II/network/members)
+### 💫 Thanks to everyone who forked
+
+[![Forkers](https://reporoster.com/forks/dark/GladdyKing/JINU-II)](https://github.com/GladdyKing/JINU-II/network/members)
 
 </div>
 
@@ -386,9 +151,7 @@ Core features • Gladdy Framework • plugin architecture • deployment tools 
 
 <div align="center">
 
-<br/>
-
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=16&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&width=520&lines=THANKS+TO+ALL+CONTRIBUTORS+🙏;SPECIAL+THANKS+TO+OUR+STAR+SUPPORTERS+⭐" alt="Thanks"/>
+**Built with ❤️ by GladdyKing**
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=24,12,2&height=140&section=footer&animation=fadeIn" width="100%"/>
 
